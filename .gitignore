@@ -1,0 +1,7 @@
+.venv/
+venv/
+__pycache__/
+smart-grid-ui/node_modules/
+smart-grid-ui/build/
+.DS_Store
+*.pyc
