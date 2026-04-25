@@ -1,5 +1,6 @@
 import time
-import requests
+import urllib.request
+import json
 import random
 
 # The URL of your local FastAPI server
@@ -17,23 +18,29 @@ def send_telemetry(iteration):
         ]
     }
 
-    # 2. THE EVENT: Simulate a massive EV charging spike on iteration 5!
+    # 2. THE EVENT: Simulate a gradual EV charging spike starting at iteration 5!
     if iteration >= 5:
-        print("\n🚨 [WARNING] 6:00 PM Reached! Massive EV charging spike on TX-A detected (120 kW)!")
-        payload["data"][0]["load_kw"] = 120.0  # Pushes TX-A over its 100.0 limit
+        # Gradually ramp up load by 8kW per iteration to let the Predictive AI catch the trend
+        spike = min(120.0, 50.0 + (iteration - 4) * 8.0)
+        print(f"\n[WARNING] EV charging spike ramping up on TX-A! Current: {spike:.1f} kW")
+        payload["data"][0]["load_kw"] = round(spike, 2)
 
     # 3. Send the JSON payload to the FastAPI backend
     try:
-        response = requests.post(API_URL, json=payload)
-        if response.status_code == 200:
-            print(f"Iteration {iteration}: IoT Telemetry sent successfully.")
-        else:
-            print(f"Iteration {iteration}: Failed. Server returned {response.status_code}")
+        req = urllib.request.Request(API_URL, method="POST")
+        req.add_header("Content-Type", "application/json")
+        data = json.dumps(payload).encode("utf-8")
+        
+        with urllib.request.urlopen(req, data=data) as response:
+            if response.status == 200:
+                print(f"Iteration {iteration}: IoT Telemetry sent successfully.")
+            else:
+                print(f"Iteration {iteration}: Failed. Server returned {response.status}")
     except Exception as e:
-        print(f"❌ Error connecting to server. Is your Uvicorn server running? Details: {e}")
+        print(f"[ERROR] Error connecting to server. Is your Uvicorn server running? Details: {e}")
 
 if __name__ == "__main__":
-    print("⚡ Starting Smart Grid IoT Simulator...")
+    print("Starting Smart Grid IoT Simulator...")
     print("Sending baseline telemetry every 3 seconds. The spike will trigger at Iteration 5.\n")
     
     iteration = 1
@@ -44,4 +51,4 @@ if __name__ == "__main__":
             iteration += 1
             time.sleep(3) 
     except KeyboardInterrupt:
-        print("\n🛑 Simulator stopped manually.")
+        print("\nSimulator stopped manually.")

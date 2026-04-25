@@ -115,6 +115,60 @@
 	background: #fff;
 }
 
+.weather-controls {
+	display: flex;
+	gap: 12px;
+	border-left: 2px solid #e2e8f0;
+	padding-left: 12px;
+	margin-left: 4px;
+	flex-wrap: wrap;
+}
+
+.weather-group {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	background: #f8fafc;
+	border: 1px solid #cbd5e1;
+	border-radius: 8px;
+	padding: 4px;
+}
+
+.weather-group input,
+.weather-group select {
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	padding: 6px 8px;
+	font: inherit;
+	background: #fff;
+}
+
+.weather-group input[type="text"] {
+	width: 120px;
+}
+
+.control-strip .weather-group button {
+	border: none;
+	background: #e2e8f0;
+	color: #0f172a;
+	font-weight: 600;
+	padding: 8px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.control-strip .weather-group button:hover:not(:disabled) {
+	background: #cbd5e1;
+	transform: none;
+	filter: none;
+}
+
+.control-strip .weather-group button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
 .status-bar {
 	max-width: 1200px;
 	margin: 14px auto;
@@ -288,7 +342,7 @@
 .event-log-wrap h3 {
 	margin: 0;
 	padding: 0;
-	font-size: 0.9rem;
+	font-size: 1.05rem;
 }
 
 .event-log-header {
@@ -353,23 +407,24 @@
 }
 
 .event-log-list {
-	max-height: 175px;
+	max-height: 280px;
 	overflow-y: auto;
-	padding: 6px;
+	padding: 10px;
 	display: grid;
-	gap: 6px;
+	gap: 10px;
 }
 
 .event-row {
 	display: grid;
-	grid-template-columns: 68px 1fr;
-	gap: 8px;
-	padding: 6px 8px;
+	grid-template-columns: 85px 1fr;
+	gap: 12px;
+	padding: 10px 14px;
 	border-radius: 8px;
-	font-size: 0.82rem;
-	line-height: 1.3;
+	font-size: 0.95rem;
+	line-height: 1.4;
 	border: 1px solid #dbeafe;
 	background: #ffffff;
+	align-items: center;
 }
 
 .event-row.success {
@@ -384,7 +439,8 @@
 
 .event-time {
 	font-weight: 700;
-	color: #334155;
+	color: #475569;
+	font-size: 0.85rem;
 }
 
 .event-message {
